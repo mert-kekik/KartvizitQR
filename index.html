@@ -73,10 +73,12 @@
             const qrcodeDiv = document.getElementById("qrcode");
             qrcodeDiv.innerHTML = ""; 
             
+            // Veri kapasitesini artırmak için CorrectLevel.L kullanıldı
             new QRCode(qrcodeDiv, {
                 text: vcard,
                 width: 256,
-                height: 256
+                height: 256,
+                correctLevel: QRCode.CorrectLevel.L
             });
 
             document.getElementById("downloadBtn").style.display = "block";
@@ -87,7 +89,6 @@
             const originalCanvas = qrcodeDiv.querySelector("canvas");
 
             if (originalCanvas) {
-                // QR kodun rahat okunması için etrafına beyaz boşluk (padding) ekleniyor
                 const padding = 20;
                 const newCanvas = document.createElement("canvas");
                 newCanvas.width = originalCanvas.width + (padding * 2);
@@ -95,14 +96,11 @@
 
                 const ctx = newCanvas.getContext("2d");
 
-                // Arka planı beyaz yap
                 ctx.fillStyle = "#ffffff";
                 ctx.fillRect(0, 0, newCanvas.width, newCanvas.height);
 
-                // Orijinal QR'ı beyaz zemin üzerine çiz
                 ctx.drawImage(originalCanvas, padding, padding);
 
-                // İndirme işlemini başlat
                 const dataUrl = newCanvas.toDataURL("image/png");
                 const link = document.createElement("a");
                 link.href = dataUrl;
