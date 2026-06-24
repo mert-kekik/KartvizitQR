@@ -22,21 +22,40 @@
     <input type="text" id="title" placeholder="Unvan">
     
     <button onclick="generateQR()">Kartviziti Üret</button>
-    <div id="qrcode"></div>
+    <div id="qrcode">
+        <button id="downloadBtn" style="display:none; background: #28a745;" onclick="downloadQR()">QR Kodu İndir</button>
+
+    </div>
 
     <script>
         function generateQR() {
-            const name = document.getElementById('name').value;
-            const surname = document.getElementById('surname').value;
-            const phone = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
-            const title = document.getElementById('title').value;
+    const name = document.getElementById('name').value;
+    const surname = document.getElementById('surname').value;
+    const phone = document.getElementById('phone').value;
+    const email = document.getElementById('email').value;
+    const title = document.getElementById('title').value;
 
-            const vcard = `BEGIN:VCARD\nVERSION:3.0\nN:${surname};${name};;;\nFN:${name} ${surname}\nTEL;TYPE=CELL:${phone}\nEMAIL:${email}\nTITLE:${title}\nEND:VCARD`;
+    const vcard = `BEGIN:VCARD\nVERSION:3.0\nN:${surname};${name};;;\nFN:${name} ${surname}\nTEL;TYPE=CELL:${phone}\nEMAIL:${email}\nTITLE:${title}\nEND:VCARD`;
 
-            document.getElementById("qrcode").innerHTML = ""; // Öncekini temizle
-            new QRCode(document.getElementById("qrcode"), vcard);
-        }
+    const qrcodeDiv = document.getElementById("qrcode");
+    qrcodeDiv.innerHTML = ""; 
+    
+    new QRCode(qrcodeDiv, vcard);
+
+    // İndir butonunu görünür yap
+    document.getElementById("downloadBtn").style.display = "block";
+}
+
+function downloadQR() {
+    const qrcodeDiv = document.getElementById("qrcode");
+    const img = qrcodeDiv.querySelector("img");
+    const link = document.createElement("a");
+    
+    link.href = img.src;
+    link.download = "kartvizit_qr.png";
+    link.click();
+}
+
     </script>
 </body>
 </html>
