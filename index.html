@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonsuz Kartvizit</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        input { width: 90%; max-width: 300px; padding: 10px; margin: 5px; border-radius: 5px; border: none; }
+        button { width: 90%; max-width: 320px; padding: 12px; margin: 10px; border-radius: 5px; border: none; cursor: pointer; background: #007bff; color: white; font-weight: bold; }
+        #qrcode { margin-top: 20px; background: white; padding: 10px; }
+    </style>
+</head>
+<body>
+
+    <h2>Sonsuz Kartvizit</h2>
+    <input type="text" id="name" placeholder="Ad">
+    <input type="text" id="surname" placeholder="Soyad">
+    <input type="text" id="phone" placeholder="Telefon">
+    <input type="text" id="email" placeholder="E-posta">
+    <input type="text" id="title" placeholder="Unvan">
+    
+    <button onclick="generateQR()">Kartviziti Üret</button>
+    <div id="qrcode"></div>
+
+    <script>
+        function generateQR() {
+            const name = document.getElementById('name').value;
+            const surname = document.getElementById('surname').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const title = document.getElementById('title').value;
+
+            const vcard = `BEGIN:VCARD\nVERSION:3.0\nN:${surname};${name};;;\nFN:${name} ${surname}\nTEL;TYPE=CELL:${phone}\nEMAIL:${email}\nTITLE:${title}\nEND:VCARD`;
+
+            document.getElementById("qrcode").innerHTML = ""; // Öncekini temizle
+            new QRCode(document.getElementById("qrcode"), vcard);
+        }
+    </script>
+</body>
+</html>
+
