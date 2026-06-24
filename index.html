@@ -6,11 +6,44 @@
     <title>Sonsuz Kartvizit</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        body { font-family: sans-serif; background: #121212; color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        input { width: 90%; max-width: 300px; padding: 10px; margin: 5px; border-radius: 5px; border: none; }
-        button { width: 90%; max-width: 320px; padding: 12px; margin: 10px; border-radius: 5px; border: none; cursor: pointer; background: #007bff; color: white; font-weight: bold; }
-        #qrcode { margin-top: 20px; background: white; padding: 10px; display: flex; flex-direction: column; align-items: center; }
-        #downloadBtn { background: #28a745; display: none; }
+        body { 
+            font-family: sans-serif; 
+            background: #121212; 
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px; 
+        }
+        input { 
+            width: 90%; 
+            max-width: 300px; 
+            padding: 10px; 
+            margin: 5px; 
+            border-radius: 5px; 
+            border: none; 
+        }
+        button { 
+            width: 90%; 
+            max-width: 320px; 
+            padding: 12px; 
+            margin: 10px; 
+            border-radius: 5px; 
+            border: none; 
+            cursor: pointer; 
+            background: #007bff; 
+            color: white; 
+            font-weight: bold; 
+        }
+        #qrcode { 
+            margin-top: 20px; 
+            background: white; 
+            padding: 10px; 
+        }
+        #downloadBtn { 
+            background: #28a745; 
+            display: none; 
+        }
     </style>
 </head>
 <body>
@@ -26,8 +59,8 @@
     
     <div id="qrcode"></div>
     <button id="downloadBtn" onclick="downloadQR()">QR Kodu İndir</button>
-    
-        <script>
+
+    <script>
         function generateQR() {
             const name = document.getElementById('name').value;
             const surname = document.getElementById('surname').value;
@@ -40,8 +73,12 @@
             const qrcodeDiv = document.getElementById("qrcode");
             qrcodeDiv.innerHTML = ""; 
             
-            // Yeni QR kod oluştur
-            new QRCode(qrcodeDiv, vcard);
+            // QR Kod oluşturucu (Kütüphane varsayılan olarak canvas oluşturur)
+            new QRCode(qrcodeDiv, {
+                text: vcard,
+                width: 256,
+                height: 256
+            });
 
             // Butonu görünür yap
             document.getElementById("downloadBtn").style.display = "block";
@@ -49,32 +86,23 @@
 
         function downloadQR() {
             const qrcodeDiv = document.getElementById("qrcode");
-            
-            // Kütüphane genellikle "img" etiketi oluşturur
-            const img = qrcodeDiv.querySelector("img");
-            // Bazı tarayıcılarda "canvas" oluşturabilir
             const canvas = qrcodeDiv.querySelector("canvas");
 
-            let dataUrl = "";
-            
-            if (img && img.src) {
-                dataUrl = img.src;
-            } else if (canvas) {
-                dataUrl = canvas.toDataURL("image/png");
-            }
-
-            if (dataUrl) {
+            if (canvas) {
+                // Canvas verisini PNG olarak al
+                const dataUrl = canvas.toDataURL("image/png");
+                
+                // İndirme işlemini başlat
                 const link = document.createElement("a");
-                link.download = "kartvizit_qr.png";
                 link.href = dataUrl;
+                link.download = "kartvizit_qr.png";
+                document.body.appendChild(link);
                 link.click();
+                document.body.removeChild(link);
             } else {
-                // Eğer burada hata alıyorsan, kütüphane henüz çizim yapmamıştır.
-                // Bir saniyelik çok kısa bir gecikme ekleyelim.
-                alert("QR kod oluşturuluyor, lütfen 1 saniye bekleyip tekrar basın.");
+                alert("QR kod henüz oluşturulmamış.");
             }
         }
     </script>
-
 </body>
 </html>
